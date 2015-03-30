@@ -1,16 +1,9 @@
 
 // clavier FMBN16BD
-// keypad pins to arduino pin mapping
-const int kpPin1 = 26;
-const int kpPin2 = 27;
-const int kpPin3 = 28;
-const int kpPin4 = 29;
-const int kpPin5 = 33;
-const int kpPin6 = 32;
-const int kpPin7 = 31;
-const int kpPin8 = 30;
 
-int kpGetNibble1(){
+#include "clavier.h"
+
+int kpGetNibble1(void){
     int res = 0x00;
 
     pinMode(kpPin1, INPUT);
@@ -44,7 +37,7 @@ int kpGetNibble1(){
     return res;
 }
 
-int kpGetNibble2(){
+int kpGetNibble2(void){
     int res = 0x00;
 
     pinMode(kpPin1, OUTPUT);
@@ -78,7 +71,7 @@ int kpGetNibble2(){
     return res;
 }
 
-int kpGetValue(){
+int kpGetValue(void){
     int res = 0x00;
     res += getNibble1();
     res += getNibble2();
