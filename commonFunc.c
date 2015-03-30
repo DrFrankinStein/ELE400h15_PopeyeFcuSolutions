@@ -1,6 +1,6 @@
 #include <commonFunc.h>
 
-/*int power(int base, int exponent) // equivalent pow() dans arduino donc inutile
+/*int power(int base, int exponent) // equivalent pow() dans arduino donc inutile vraiment inutile
 {
 	int result=1;
 	
