@@ -1,116 +1,28 @@
-
-// clavier FMBN16BD
-
+#include <Keypad.h>
 #include "clavier.h"
 
-int kpGetNibble1(void){
-    int res = 0x00;
+Keypad keypad;
 
-    pinMode(kpPin1, INPUT);
-    pinMode(kpPin2, INPUT);
-    pinMode(kpPin3, INPUT);
-    pinMode(kpPin4, INPUT);
-    pinMode(kpPin5, OUTPUT);
-    pinMode(kpPin6, OUTPUT);
-    pinMode(kpPin7, OUTPUT);
-    pinMode(kpPin8, OUTPUT);
+void kpSetup(void){
+    const byte ROWS = 4; //four rows
+    const byte COLS = 4; //three columns
+    char keys[ROWS][COLS] = {
+        {'1','2','3','m'},
+        {'4','5','6','o'},
+        {'7','8','9','s'},
+        {'g','0','d','e'}
+    };
+    byte rowPins[ROWS] = {kpPin1, kpPin2, kpPin3, kpPin4}; //connect to the row pinouts of the keypad
+    byte colPins[COLS] = {kpPin5, kpPin6, kpPin7, kpPin8}; //connect to the column pinouts of the keypad
 
-    digitalWrite(kpPin5, HIGH);
-    digitalWrite(kpPin6, HIGH);
-    digitalWrite(kpPin7, HIGH);
-    digitalWrite(kpPin8, HIGH);
-    
-    if(digitalRead(kpPin1) == HIGH)
-        res += 0x01;
-    if(digitalRead(kpPin2) == HIGH)
-        res += 0x02;
-    if(digitalRead(kpPin3) == HIGH)
-        res += 0x04;
-    if(digitalRead(kpPin4) == HIGH)
-        res += 0x08;
-
-    digitalWrite(kpPin5, LOW);
-    digitalWrite(kpPin6, LOW);
-    digitalWrite(kpPin7, LOW);
-    digitalWrite(kpPin8, LOW);
-
-    return res;
+    keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 }
 
-int kpGetNibble2(void){
-    int res = 0x00;
+char kpGetValue(void){
+    char key = keypad.getKey();
 
-    pinMode(kpPin1, OUTPUT);
-    pinMode(kpPin2, OUTPUT);
-    pinMode(kpPin3, OUTPUT);
-    pinMode(kpPin4, OUTPUT);
-    pinMode(kpPin5, INPUT);
-    pinMode(kpPin6, INPUT);
-    pinMode(kpPin7, INPUT);
-    pinMode(kpPin8, INPUT);
-    
-    digitalWrite(kpPin5, HIGH);
-    digitalWrite(kpPin6, HIGH);
-    digitalWrite(kpPin7, HIGH);
-    digitalWrite(kpPin8, HIGH);
-    
-    if(digitalRead(kpPin5) == HIGH)
-        res += 0x10;
-    if(digitalRead(kpPin6) == HIGH)
-        res += 0x20;
-    if(digitalRead(kpPin7) == HIGH)
-        res += 0x40;
-    if(digitalRead(kpPin8) == HIGH)
-        res += 0x80;
-
-    digitalWrite(kpPin1, LOW);
-    digitalWrite(kpPin2, LOW);
-    digitalWrite(kpPin3, LOW);
-    digitalWrite(kpPin4, LOW);
-
-    return res;
+    if (key != NO_KEY)
+        return key;
+    else
+        return -1;
 }
-
-int kpGetValue(void){
-    int res = 0x00;
-    res += getNibble1();
-    res += getNibble2();
-
-    switch(res){
-        case 0x88:
-            return 1;
-        case 0x48:
-            return 2;
-        case 0x28:
-            return 3;
-        case 0x18:
-            return 4;
-        case 0x84:
-            return 5;
-        case 0x44:
-            return 6;
-        case 0x24:
-            return 7;
-        case 0x14:
-            return 8;
-        case 0x82:
-            return 9;
-        case 0x42:
-            return 10;
-        case 0x22:
-            return 11;
-        case 0x12:
-            return 12;
-        case 0x81:
-            return 13;
-        case 0x41:
-            return 14;
-        case 0x21:
-            return 15;
-        case 0x11:
-            return 16;
-        default:
-            return -1;
-    }
-}
-
