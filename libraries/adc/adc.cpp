@@ -1,4 +1,4 @@
-/* ================ adc.c ============================================
+/* ================ adc.cpp ============================================
 ** ELE-400 MÉTHODOLOGIE DE DESIGN EN GÉNIE ÉLECTRIQUE
 ** HIVER 2015
 ** Ecole de Technologie Supérieure

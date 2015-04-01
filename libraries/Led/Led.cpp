@@ -1,4 +1,4 @@
-/* ================ Led.c =================================================
+/* ================ Led.cpp =================================================
 ** ELE-400 MÉTHODOLOGIE DE DESIGN EN GÉNIE ÉLECTRIQUE
 ** HIVER 2015
 ** Ecole de Technologie Supérieure
@@ -57,7 +57,7 @@ void setupLED()
 void setLED(int Pin)
 {
   //On configure la LED en mode hight
-  digitalWrite(Pin, HIGH);
+  digitalWrite(Pin, LOW);
   
 }
 
@@ -72,7 +72,7 @@ void setLED(int Pin)
 void resetLED(int Pin)
 {
   // on configure le LED en mode low
-  digitalWrite(Pin, LOW);
+  digitalWrite(Pin, HIGH);
 }
 
 
@@ -86,13 +86,15 @@ void resetLED(int Pin)
 ** Description:vérifie si la led est allumée ou non et retourne la réponse 
 ** (Vrai ou faux)
 ** ------------------------------------------------------------------------ */
-bool isLEDsetted(int Pin)
+/*bool isLEDsetted(int Pin) // NOT WORKING
 {
   int led_state = 0; // création d'une variable d'état de la LED
   
   led_state = digitalRead(Pin); // Lecture de l'état de la pin
-  return led_state;  
-}
+  
+  //return led_state;  
+  return digitalRead(Pin); 
+}*/
 
 
 /* ------------------------------------------------------------------------
@@ -103,21 +105,21 @@ bool isLEDsetted(int Pin)
 ** ------------------------------------------------------------------------
 ** Description:Sert à changer l’état d’une LED (on à off et vive versa)
 ** ------------------------------------------------------------------------ */
-void blinkLED(int Pin)
+/*void blinkLED(int Pin)//NOT WORKING
 {
-  /*if (led_state == 0) // si la led est à l'état bas
+  if (led_state == 0) // si la led est à l'état bas
   {
     digitalWrite(Pin, HIGH); // on la met à l'état haut
   }
   else // si elle est a l'état haut
   {
     digitalWrite(Pin, LOW); // on la met à l'état bas
-  }   */
+  }   
   
-  digitalWrite(Pin,  !digitalRead(Pin));
+  digitalWrite(Pin,  !isLEDsetted(Pin));
   
   
-}
+}*/
 
 /* ========================================================================
 ** End of  Led.c
