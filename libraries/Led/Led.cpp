@@ -19,6 +19,7 @@
 ** Include files 
 ** ======================================================================== */
 
+#include "Led.h" 
 
 /* ========================================================================
 ** Prototypes
@@ -68,7 +69,7 @@ void setLED(int Pin)
 ** ------------------------------------------------------------------------
 ** Description:Sert à éteindre une LED
 ** ------------------------------------------------------------------------ */
-void resetLED(int Pin, int pinState)
+void resetLED(int Pin)
 {
   // on configure le LED en mode low
   digitalWrite(Pin, LOW);
@@ -102,16 +103,20 @@ bool isLEDsetted(int Pin)
 ** ------------------------------------------------------------------------
 ** Description:Sert à changer l’état d’une LED (on à off et vive versa)
 ** ------------------------------------------------------------------------ */
-void blinkLED(int Pin, bool led_state)
+void blinkLED(int Pin)
 {
-  if led_state = 0 // si la led est à l'état bas
+  /*if (led_state == 0) // si la led est à l'état bas
   {
     digitalWrite(Pin, HIGH); // on la met à l'état haut
   }
   else // si elle est a l'état haut
   {
     digitalWrite(Pin, LOW); // on la met à l'état bas
-  }   
+  }   */
+  
+  digitalWrite(Pin,  !digitalRead(Pin));
+  
+  
 }
 
 /* ========================================================================

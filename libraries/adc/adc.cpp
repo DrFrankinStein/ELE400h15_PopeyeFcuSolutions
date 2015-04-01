@@ -20,7 +20,7 @@
 ** Include files 
 ** ======================================================================== */
 
-#include <adc.h>
+#include "adc.h"
 
 /* ========================================================================
 ** Global variables
@@ -42,7 +42,7 @@ int bitsResolution;
 ** ------------------------------------------------------------------------ */
 void setupADC(int resolution)
 {
-	analogReference(DEFAULT); 			//Set voltage reference to 0-3.3V
+	//analogReference(DEFAULT); 			//Set voltage reference to 0-3.3V
 	setResolutionADC(resolution);
 }
 
@@ -89,7 +89,7 @@ float readADCPourcent(int sensorPin)
 /* ------------------------------------------------------------------------
 ** name: readADCReal
 ** ------------------------------------------------------------------------
-** input: sensorPin : Name of the pin oof the ADC (ex : A0)
+** input: sensorPin : Name of the pin of the ADC (ex : A0)
 ** output: A float value of the actual voltage
 ** ------------------------------------------------------------------------
 ** Description: Read value of ADC and return a float value of the voltage
@@ -100,7 +100,47 @@ float readADCReal(int sensorPin)
 	return readADCPourcent(sensorPin) * VOLTAGE_REFERENCE_ADC;
 }
 
+/* ------------------------------------------------------------------------
+** name: readLevierInteger
+** ------------------------------------------------------------------------
+** input: None
+** output: a integer value of n bits where n is the resolution of the ADC
+** ------------------------------------------------------------------------
+** Description:	Read value of ADC and return a integer value of n bits where n is the resolution of the ADC
+** ------------------------------------------------------------------------ */
 
+int readLevierInteger(void)
+{
+	return analogRead(ADC_PIN);
+}
+
+/* ------------------------------------------------------------------------
+** name: readADCPourcent
+** ------------------------------------------------------------------------
+** input: sensorPin : Name of the pin oof the ADC (ex : A0)
+** output: Pourcentage value of the value and the maximum value  
+** ------------------------------------------------------------------------
+** Description: Read value of ADC and return pourcentage relative to the maximum value of the ADC
+** ------------------------------------------------------------------------ */
+
+float readLevierPourcent(void)
+{
+	return readADCInteger(ADC_PIN) * 100 / pow(2,bitsResolution);
+}
+
+/* ------------------------------------------------------------------------
+** name: readADCReal
+** ------------------------------------------------------------------------
+** input: None
+** output: A float value of the actual voltage
+** ------------------------------------------------------------------------
+** Description: Read value of ADC and return a float value of the voltage
+** ------------------------------------------------------------------------ */
+
+float readLevierReal(void)
+{
+	return readADCPourcent(ADC_PIN) * VOLTAGE_REFERENCE_ADC;
+}
 
 /* ========================================================================
 ** End of  Nom.c
