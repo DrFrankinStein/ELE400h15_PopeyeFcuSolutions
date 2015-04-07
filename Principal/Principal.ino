@@ -2,6 +2,7 @@
 #include "Led.h"
 
 float value;
+int interuptFlag = 0;
 
 void setup() 
 {
@@ -24,6 +25,10 @@ void setup()
   resetLED(PIN_ERROR);
   value=0;
   
+  //Bouton d'urgence
+  pinMode(53, INPUT);
+  attachInterrupt(53, ISR_Emergency, RISING);
+  
 }
 
 void loop() 
@@ -42,4 +47,19 @@ void loop()
     
     Serial.println(value);
     delay(100);
+    
+    // Traitement de l'interruption URGENCE
+    if(interuptFlag==1)
+    {
+      unsigned char lu=0;
+      Serial.print("URGENCE");
+      if (Serial.available() > 0) {
+        interuptFlag = 0;
+      }
+    }
+      
+}
+
+void ISR_Emergency (){
+    interuptFlag = 1;
 }

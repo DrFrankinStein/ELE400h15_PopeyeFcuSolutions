@@ -14,6 +14,7 @@
 ** Description: 
 ** ======================================================================== */
 
+//Pour éviter de déclarer ce fichier plus d'une fois
 #ifndef LED_H
 #define LED_H
 
@@ -21,8 +22,8 @@
 ** Include files 
 ** ======================================================================== */
 #include "pins_arduino.h"
-#include "Arduino.h"
-#include <stdbool.h>
+#include "Arduino.h"	//Besoin de ce fichier pour utiliser les fonctions du Arduino
+#include <stdbool.h>	//Besoin de ce fichier pour utiliser les type bool
 
 /* ========================================================================
 ** Define
@@ -31,6 +32,9 @@
 #define PIN_POWER 35    // pin PB26 relié à la led power
 #define PIN_CONNEXION 37  // pin PA14 relié a la led connexion
 #define PIN_ERROR 39    // pin PA15 relié à la led error
+#define DEL_VERTE PIN_POWER
+#define DEL_JAUNE PIN_CONNEXION
+#define DEL_ROUGE PIN_ERROR
 
 /* ========================================================================
 ** Structure
@@ -61,10 +65,10 @@ void setLED(int Pin);
 void resetLED(int Pin);
 
 //vérifie si la led est allumée ou non et retourne la réponse (Vrai ou faux)
-bool isLEDsetted(int Pin);
+//bool isLEDsetted(int Pin);
 
 //Sert à changer l’état d’une LED (on à off et vive versa)
-void blinkLED(int Pin); 
+//void blinkLED(int Pin); 
 
 /* ========================================================================
 ** End of  Led.h
