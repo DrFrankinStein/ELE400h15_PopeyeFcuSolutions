@@ -1,5 +1,6 @@
 
 // clavier FMBN16BD
+#include "Arduino.h"
 
 const int kpPin1 = 26;
 const int kpPin2 = 27;
