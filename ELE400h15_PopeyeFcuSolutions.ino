@@ -1,13 +1,21 @@
 #include "adc.h"
+#include "lcd.h"
 
 float value;
 float valuetmp;
 
 void setup()
 {
+    // debug port init
     Serial.begin(9600);
     Serial.println("init");
+
+    // adc init
     setupADC(12);
+
+    // lcd init
+    lcdInit();
+    lcdWriteString("init");
 }
 
 float getAngle()
@@ -27,12 +35,18 @@ float getAngle()
 
 void loop()
 {
+    char str[10];
+
     valuetmp = getAngle();
 
     if(valuetmp != value)
     {
         value = valuetmp;
         Serial.println(value);
+
+        lcdClrScr();
+        sprintf(str, "%f", value);
+        lcdWriteString(str);
     }
 
     delay(100);
