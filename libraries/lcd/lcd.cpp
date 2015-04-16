@@ -4,18 +4,18 @@
 ** Ecole de Technologie Supérieure
 ** ========================================================================
 
-				Equipe:	PopeyeFcuSolutions	
-				
+				Equipe:	PopeyeFcuSolutions
+
 ** ========================================================================
-** REALISATION: Controleur de FCU	
+** REALISATION: Controleur de FCU
 ** ========================================================================
 ** Ecrit par: 	Vincent Prieur
 ** ========================================================================
 ** Description: Fonctions de controle de l'ecran LCD
-** ======================================================================== */ 
+** ======================================================================== */
 
 /* ========================================================================
-** Fichiers d'en-tetes 
+** Fichiers d'en-tetes
 ** ======================================================================== */
 #include "lcd.h"
 
@@ -29,13 +29,13 @@
 ** Entree(s): Aucune
 ** Sortie(s): Acune
 ** ------------------------------------------------------------------------
-** Description: Initialise l'écran LCD. 
+** Description: Initialise l'écran LCD.
 ** ------------------------------------------------------------------------ */
 void lcdInit()
 {
   Serial1.begin(9600);		// LCD a 9600 Baud par defaut
   delay(100);				// Delai necessaire a l'initialisation
-  lcdPwr(ON);				
+  lcdPwr(ON);
   lcdClrScr();
 }
 
@@ -47,7 +47,7 @@ void lcdInit()
 ** ------------------------------------------------------------------------
 ** Description: Ecrit une chaine de caractere a l'ecran LCD
 ** ------------------------------------------------------------------------ */
-void lcdWriteString(char *string)
+void lcdWriteString(const char *string)
 {
 	Serial1.write(string);
 }
@@ -62,7 +62,7 @@ void lcdWriteString(char *string)
 ** Description: Ecrit dans le registre de configuration
 				*** Ne pas utiliser cette fonction directement ***
 ** ------------------------------------------------------------------------ */
-void lcdWriteConfigSpace(unsigned char configReg, unsigned char configWord = 0)
+void lcdWriteConfigSpace(const char configReg, const char configWord = 0)
 {
     Serial1.write(CONFIG_SPACE_ADDRESS);
     Serial1.write(configReg);
@@ -90,7 +90,7 @@ void lcdPwr(unsigned char etat)
 /* ------------------------------------------------------------------------
 ** Nom: lcdSetCursor
 ** ------------------------------------------------------------------------
-** Entree(s): Position du curseur 
+** Entree(s): Position du curseur
 ** Sortie(s): Aucune
 ** ------------------------------------------------------------------------
 ** Description: Place le curseur a la position desire

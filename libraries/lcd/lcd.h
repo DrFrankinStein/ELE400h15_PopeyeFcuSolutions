@@ -2,9 +2,11 @@
 #define LCD_H
 // Fichier d'en-tete pour l'ecran a cristaux liquides
 
+#include "Arduino.h"
+
 void lcdInit();
-void lcdWriteString(unsigned char *string);
-void lcdWriteConfigSpace(unsigned char configReg, unsigned char configWord = 0);
+void lcdWriteString(const char *string);
+void lcdWriteConfigSpace(const char configReg, const char configWord);
 void lcdPwr(unsigned char etat);
 void lcdSetCursor(unsigned char position);
 void lcdSetCursorHome();
@@ -54,4 +56,3 @@ void lcdDisplayBaudrate();
 #define RIFGHT 	0x00
 
 #endif
-
