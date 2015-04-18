@@ -86,15 +86,11 @@ void resetLED(int Pin)
 ** Description:vérifie si la led est allumée ou non et retourne la réponse 
 ** (Vrai ou faux)
 ** ------------------------------------------------------------------------ */
-/*bool isLEDsetted(int Pin) // NOT WORKING
-{
-  int led_state = 0; // création d'une variable d'état de la LED
-  
-  led_state = digitalRead(Pin); // Lecture de l'état de la pin
-  
+bool isLEDsetted(int Pin) 
+{ 
   //return led_state;  
   return digitalRead(Pin); 
-}*/
+}
 
 
 /* ------------------------------------------------------------------------
@@ -105,21 +101,10 @@ void resetLED(int Pin)
 ** ------------------------------------------------------------------------
 ** Description:Sert à changer l’état d’une LED (on à off et vive versa)
 ** ------------------------------------------------------------------------ */
-/*void blinkLED(int Pin)//NOT WORKING
+void blinkLED(int Pin)
 {
-  if (led_state == 0) // si la led est à l'état bas
-  {
-    digitalWrite(Pin, HIGH); // on la met à l'état haut
-  }
-  else // si elle est a l'état haut
-  {
-    digitalWrite(Pin, LOW); // on la met à l'état bas
-  }   
-  
-  digitalWrite(Pin,  !isLEDsetted(Pin));
-  
-  
-}*/
+  digitalWrite(Pin,  !isLEDsetted(Pin));   
+}
 
 /* ========================================================================
 ** End of  Led.c

@@ -36,6 +36,9 @@
 #define DEL_JAUNE PIN_CONNEXION
 #define DEL_ROUGE PIN_ERROR
 
+/** À enlever d'ici peut être **/
+#define PIN_KILL_SWICTH 53        // pin reliée à la kill switch
+
 /* ========================================================================
 ** Structure
 ** ======================================================================== */
@@ -65,13 +68,12 @@ void setLED(int Pin);
 void resetLED(int Pin);
 
 //vérifie si la led est allumée ou non et retourne la réponse (Vrai ou faux)
-//bool isLEDsetted(int Pin);
+bool isLEDsetted(int Pin);
 
 //Sert à changer l’état d’une LED (on à off et vive versa)
-//void blinkLED(int Pin); 
+void blinkLED(int Pin); 
 
 /* ========================================================================
 ** End of  Led.h
 ** ======================================================================== */
-
 #endif
