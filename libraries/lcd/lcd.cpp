@@ -34,9 +34,10 @@
 void lcdInit()
 {
   Serial1.begin(9600);		// LCD a 9600 Baud par defaut
-  delay(100);				// Delai necessaire a l'initialisation
+  delay(100);				// Delai necessaire a l'initialisation 
   lcdPwr(ON);
   lcdClrScr();
+  
 }
 
 /* ------------------------------------------------------------------------
@@ -257,6 +258,94 @@ void lcdDisplayBaudrate()
 {
 	lcdWriteConfigSpace(DISP_BAUDRATE);
 }
+
+/* ------------------------------------------------------------------------
+** Nom: lcdWriteStringAtPosition
+** ------------------------------------------------------------------------
+** Entree(s): ligne(0-3), colonne(0-19), string 
+** Sortie(s): Vérification si les entrées sont valides
+** ------------------------------------------------------------------------
+** Description: Affiche une String qui débute à la ligne et colonne indiquées
+** ------------------------------------------------------------------------ */
+bool lcdWriteStringAtPosition(unsigned int ligne, unsigned int colonne, const char *string)
+{
+	//si la colonne dépasse 19
+	if(colonne>19)
+		return false;
+	
+	//selon la ligne, on fixe le curseur à la bonne place
+	switch(ligne)
+	{
+	
+		case 0 :
+			if(colonne==0)
+				lcdSetCursorHome();
+			else
+				lcdSetCursor(LIGNE1+colonne);
+			break;
+	
+		case 1 :
+			lcdSetCursor(LIGNE2+colonne);
+			break;
+	
+		case 2 :
+			lcdSetCursor(LIGNE3+colonne);
+			break;
+	
+		case 3 : 
+			lcdSetCursor(LIGNE4+colonne);
+			break;
+	
+		//si la ligne n'est pas entre 0 et 3
+		default:
+			return false;
+	}
+	
+	//ICI les entrées sont valides :
+	lcdWriteString(string);
+	return true;
+}
+
+/* ------------------------------------------------------------------------
+** Nom: lcdWriteIntegerAtPosition
+** ------------------------------------------------------------------------
+** Entree(s): ligne(0-3), colonne(0-19), entier 
+** Sortie(s): Vérification si les entrées sont valides
+** ------------------------------------------------------------------------
+** Description: Affiche un entier qui débute à la ligne et colonne indiquées
+** ------------------------------------------------------------------------ */
+bool lcdWriteIntegerAtPosition(unsigned int ligne, unsigned int colonne, int entier)
+{
+	//création d'un tableau de caractère temporaire
+	char tmp[DISPLAY_CHAR_LENGTH];
+	
+	//Formatage d'une string
+	sprintf(tmp,"%d",entier);
+	
+	//Exécute l'écriture de la string temporaire 
+    return lcdWriteStringAtPosition(ligne, colonne, tmp);
+}
+
+/* ------------------------------------------------------------------------
+** Nom: lcdWriteFloatAtPosition
+** ------------------------------------------------------------------------
+** Entree(s): ligne(0-3), colonne(0-19), flottant 
+** Sortie(s): Vérification si les entrées sont valides
+** ------------------------------------------------------------------------
+** Description: Affiche un nombre flottant qui débute à la ligne et colonne indiquées
+** ------------------------------------------------------------------------ */
+bool lcdWriteFloatAtPosition(unsigned int ligne, unsigned int colonne, float flottant)
+{
+	//création d'un tableau de caractère temporaire
+	char tmp[DISPLAY_CHAR_LENGTH];
+	
+	//Formatage d'une string (1 chiffre après la virgule)
+	sprintf(tmp,"%.1f",flottant);
+	
+	//Exécute l'écriture de la string temporaire 
+    return lcdWriteStringAtPosition(ligne, colonne, tmp);
+}
+
 /* ========================================================================
 ** Fin de lcd.cpp
 ** ======================================================================== */

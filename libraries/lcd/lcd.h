@@ -21,6 +21,10 @@ void lcdShiftDisplay(unsigned char etat);
 void lcdDisplayFirmwareVersion();
 void lcdDisplayBaudrate();
 
+bool lcdWriteStringAtPosition(unsigned int ligne, unsigned int colonne, const char *string);
+bool lcdWriteIntegerAtPosition(unsigned int ligne, unsigned int colonne, int entier);
+bool lcdWriteFloatAtPosition(unsigned int ligne, unsigned int colonne, float flottant);
+
 
 // Adresse de l'espace de configuration
 #define CONFIG_SPACE_ADDRESS 0xFE
@@ -53,6 +57,15 @@ void lcdDisplayBaudrate();
 #define OFF 0x00
 
 #define LEFT 	0x01
-#define RIFGHT 	0x00
+#define RIGHT 	0x00
 
+//Nombre de caractères dans l'écran
+#define DISPLAY_CHAR_LENGTH 80
+
+//Adresse des lignes dans la matrice de l'écran
+#define LIGNE1 	0x00
+#define LIGNE2	0x40
+#define LIGNE3	0x14
+#define LIGNE4  0x54
+	
 #endif
