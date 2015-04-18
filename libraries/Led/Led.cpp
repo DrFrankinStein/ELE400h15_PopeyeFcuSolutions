@@ -34,7 +34,7 @@
 /* ------------------------------------------------------------------------
 ** name:  setupLED
 ** ------------------------------------------------------------------------
-** input: Led
+** input: Pas d'entrée
 ** output: Pas de variable retournée
 ** ------------------------------------------------------------------------
 ** Description:cette fonction sert à configurer les pin des LEDs
@@ -49,7 +49,7 @@ void setupLED()
 /* ------------------------------------------------------------------------
 ** name:  setLED
 ** ------------------------------------------------------------------------
-** input: Pin, pinState
+** input: Pin
 ** output: Pas de variable retournée
 ** ------------------------------------------------------------------------
 ** Description:cette fonction Sert à allumer une LED
@@ -64,17 +64,29 @@ void setLED(int Pin)
 /* ------------------------------------------------------------------------
 ** name:  resetLED
 ** ------------------------------------------------------------------------
-** input: Pin, pinState
+** input: Pin
 ** output: Pas de variable retournée
 ** ------------------------------------------------------------------------
 ** Description:Sert à éteindre une LED
 ** ------------------------------------------------------------------------ */
 void resetLED(int Pin)
 {
-  // on configure le LED en mode low
-  digitalWrite(Pin, HIGH);
+	// on configure le LED en mode low
+	digitalWrite(Pin, HIGH);
 }
 
+/* ------------------------------------------------------------------------
+** name:  setLEDState
+** ------------------------------------------------------------------------
+** input: Pin, state
+** output: Pas de variable retournée
+** ------------------------------------------------------------------------
+** Description:Sert à configurer une pin à un état voulu
+** ------------------------------------------------------------------------ */
+void setLEDState(int Pin, bool state)
+{
+	digitalWrite(Pin, !state);
+}
 
 
 /* ------------------------------------------------------------------------

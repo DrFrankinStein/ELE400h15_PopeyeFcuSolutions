@@ -64,6 +64,9 @@ void setLED(int Pin);
 //Sert à éteindre une LED
 void resetLED(int Pin);
 
+//Sert à configurer une pin à un état voulu
+void setLEDState(int Pin, bool state);
+
 //vérifie si la led est allumée ou non et retourne la réponse (Vrai ou faux)
 //bool isLEDsetted(int Pin);
 
