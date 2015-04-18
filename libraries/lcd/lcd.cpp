@@ -115,7 +115,7 @@ void lcdSetCursor(unsigned char position)
 void lcdSetCursorHome()
 {
 	lcdWriteConfigSpace(CURSOR_HOME);
-}
+} 
 
 /* ------------------------------------------------------------------------
 ** Nom: lcdUnderLineCursor
