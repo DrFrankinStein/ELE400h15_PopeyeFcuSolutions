@@ -1,7 +1,16 @@
 #include "Led.h"
 
-int value = 0;
-int interuptFlag = 0;
+//Variable pour le temps (previousMillis pour comparaison et interval= temps en ms pour exécuter une action)
+//ATTENTION : delay() est une commande qui ralenti le code, on utilise cette alternative pour être plus rapide.
+unsigned long previousMillis=0;
+unsigned int interval=1000;
+
+//Ajout des variables de flag
+int interuptFlag = 0, initFlag =1;
+
+//Définition des états pour ma machine à état
+enum Etat {AUCUNE, VERTE, JAUNE, ROUGE, TOUTES}; //{0,1,2,3,4}
+Etat etatCourant = AUCUNE;
 
 void setup() 
 {
@@ -9,90 +18,114 @@ void setup()
   Serial.begin(9600);
   setupLED();
   
-  resetLED(PIN_POWER);
-  resetLED(PIN_CONNEXION);
-  resetLED(PIN_ERROR);
-  
   //Bouton d'urgence
   pinMode(53, INPUT);
-  attachInterrupt(53, ISR_Emergency, RISING);  
+  
+  //Quand on clique sur le bouton, on met le signal à zéro (RISING PEUT ÊTRE CORRECT AUSSI)
+  attachInterrupt(53, ISR_Emergency, FALLING);  
 }
 
 void loop() 
 {
   // put your main code here, to run repeatedly:
-     
-    /*Serial.println(value);
-        
-    setLEDState(DEL_VERTE,(bool)(value>>2 & 1));
-    setLEDState(DEL_JAUNE,(bool)(value>>1 & 1));
-    setLEDState(DEL_ROUGE,(bool)(value>>0 & 1));
+   
+  //On regarde le temps du système pour faire comparaison
+  unsigned long currentMillis = millis();
+  
+  //Mise à jour des DEL
+  if((currentMillis-previousMillis)>interval)
+  {
+    //Mise à jour du compteur
+    previousMillis=currentMillis;
     
-    value++;   */
+    //Quoi mettre à jour
     
-    resetLED(DEL_VERTE);
-    resetLED(DEL_JAUNE);
-    resetLED(DEL_ROUGE);
-    //delay(1000);
-    
-    Serial.println("LED VERTE");
-    setLED(DEL_VERTE);
-    delay(1000);
-    
-    Serial.println("LED JAUNE");
-    resetLED(DEL_VERTE);
-    setLED(DEL_JAUNE);
-    delay(1000);
-    
-    Serial.println("LED ROUGE");
-    resetLED(DEL_JAUNE);
-    setLED(DEL_ROUGE);
-    delay(1000);
-    
-    /*Serial.println("AUCUNE LED");
-    resetLED(DEL_VERTE);
-    resetLED(DEL_JAUNE);
-    resetLED(DEL_ROUGE);
-    delay(1000);*/
-    
-    Serial.println("TOUTE LED");
-    setLED(DEL_VERTE);
-    setLED(DEL_JAUNE);
-    setLED(DEL_ROUGE);
-    delay(1000);
-       
-    // Traitement de l'interruption URGENCE
-    /*if(interuptFlag==1)
+    //Machine à état
+    switch(etatCourant)
     {
-      unsigned char lu=0;
-      Serial.println("URGENCE");
-      for(int i=0; i<5;i++)
-      {
-        setLED(PIN_POWER);
-        setLED(PIN_CONNEXION);
-        setLED(PIN_ERROR);
+      case AUCUNE:
+        Serial.println("AUCUNE DEL");
+        resetLED(DEL_VERTE);
+        resetLED(DEL_JAUNE);
+        resetLED(DEL_ROUGE);
+        etatCourant = VERTE;    
+        break;
         
-        delay(100);
+      case VERTE:
+        Serial.println("DEL VERTE");
+        setLED(DEL_VERTE);
+        etatCourant = JAUNE;
+        break;
         
-        resetLED(PIN_POWER);
-        resetLED(PIN_CONNEXION);
-        resetLED(PIN_ERROR);
+      case JAUNE :
+        Serial.println("DEL JAUNE");
+        resetLED(DEL_VERTE);
+        setLED(DEL_JAUNE);
+        etatCourant = ROUGE;
+        break;
         
-        delay(100);
-      }
-      
-        value =0;
-      
-     // if (Serial.available() > 0) 
-     // {
-        interuptFlag = 0;
-     // }
+      case ROUGE :
+        Serial.println("DEL ROUGE");
+        resetLED(DEL_JAUNE);
+        setLED(DEL_ROUGE);
+        etatCourant = TOUTES;
+        break;
+        
+      case TOUTES :
+        Serial.println("TOUTES LES DEL");
+        setLED(DEL_VERTE);
+        setLED(DEL_JAUNE);
+        setLED(DEL_ROUGE);
+        etatCourant = AUCUNE;    
+        break;
+    }    
+  }
+  
+  //Traitement de l'interruption URGENCE
+  if(interuptFlag==1)
+  {
+    //On fait flasher les DEL rapidement
+    Serial.println("URGENCE");
+    for(int i=0; i<20;i++)
+    {
+      setLED(PIN_POWER);
+      setLED(PIN_CONNEXION);
+      setLED(PIN_ERROR);
+        
+      delay(50);
+        
+      resetLED(PIN_POWER);
+      resetLED(PIN_CONNEXION);
+      resetLED(PIN_ERROR);
+        
+      delay(50);
     }
     
-    delay(1000);*/
-      
+    //On peut faire autre choses ici si on veut
+    Serial.print("Reinitialisation");
+    delay(1000);
+    Serial.print(".");
+    delay(1000);
+    Serial.print(".");
+    delay(1000);
+    Serial.print(".");
+    delay(1000);
+    Serial.println("DONE!!!");
+    delay(1000);
+    
+    //Remise à zéro des valeur
+    previousMillis=currentMillis;
+    etatCourant = AUCUNE;
+    interuptFlag = 0; //important de le faire ( et de la faire à la fin du processus)
+  }  
 }
 
-void ISR_Emergency (){
-    //interuptFlag = 1;
+void ISR_Emergency ()
+{
+    //Le initFlag est à 1 seulement au début, car l'interrupt se déclanche toujours lorsqu'on active le ISR dans le setup()
+    //On le remet à zéro et après le ISR marche comme il le faut.
+    if(initFlag)
+      initFlag=0;
+    else
+      interuptFlag = 1;
 }
