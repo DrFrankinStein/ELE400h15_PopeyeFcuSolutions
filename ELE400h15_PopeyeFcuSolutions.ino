@@ -1,13 +1,17 @@
 #include "adc.h"
 #include "lcd.h"
 #include "Led.h"
+#include "Keypad.h"
+#include "Clavier.h"
 
 //float value;
 //float valuetmp;
 
-enum {LOGO=0, MAIN_SCREEN, OPTION, URGENCE};
-float minAngle = 60.0;
-float maxAngle = 120.0;
+char tmp[20];
+
+enum {LOGO=0, MAIN_SCREEN, OPTION, INFO, URGENCE};
+float minAngle = 0.0;
+float maxAngle = 180.0;
 
 float currentAngle, currentPourcent;
 
@@ -179,6 +183,9 @@ void loop()
 
     delay(100);*/
     unsigned long currentMillis = millis();
+    char key;
+   
+    //const char *cckey = &key;
     
     updateData();
     //x++;
@@ -193,8 +200,13 @@ void loop()
       //Serial.print(" ");
       //Serial.println(x); 
       updateMainScreen();
-      
-          
+      key = kpGetValue();
+      if(key!=NO_KEY)
+      {  
+        char tmp[5]; 
+        sprintf(tmp,"%c",key);
+        lcdWriteStringAtPosition(1,0,tmp);
+      }    
     }
     
     //Traitement de l'interruption URGENCE
@@ -232,10 +244,10 @@ void loop()
       //Remise à zéro des valeur
       
       //delay(1000);
-      
-      interuptFlag = 0;
-      while(!interuptFlag)
+      key = NO_KEY;
+      while(key!='o')
       {
+        key = kpGetValue();
         delay(1);  
       }
       
