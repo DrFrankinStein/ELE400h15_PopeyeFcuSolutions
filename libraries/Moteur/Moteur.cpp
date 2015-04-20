@@ -41,7 +41,8 @@
 ** ------------------------------------------------------------------------ */
 void setupMoteur(void)
 {
-  pinMode(8, OUTPUT);	
+  pinMode(PIN_PULSE, OUTPUT);	
+  pinMode(PIN_MOTEUR, OUTPUT);	
 }
 
 /* ------------------------------------------------------------------------
@@ -52,12 +53,16 @@ void setupMoteur(void)
 ** ------------------------------------------------------------------------
 ** Description: wat
 ** ------------------------------------------------------------------------ */ 
-void tourneMoteur(int angle, int direction) {  
-
+void tourneMoteur(int angle, int direction) 
+{  
 	digitalWrite(PIN_DIRECTION, direction);
 	
 	g_APinDescription[PIN_PULSE].pPort -> PIO_SODR = g_APinDescription[PIN_PULSE].ulPin;
-	g_APinDescription[PIN_PULSE].pPort -> PIO_CODR = g_APinDescription[PIN_PULSE].ulPin;
+	g_APinDescription[PIN_PULSE].pPort -> PIO_SODR = g_APinDescription[PIN_PULSE].ulPin;
+	
+	for(int i = 0; i<82;i++)
+		g_APinDescription[PIN_PULSE].pPort -> PIO_CODR = g_APinDescription[PIN_PULSE].ulPin;
+	
 	//digitalWrite(PIN_PULSE, HIGH);
 	//digitalWrite(PIN_PULSE, LOW);
 }

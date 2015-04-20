@@ -32,8 +32,8 @@
 
 //Les pins qui nous sont disponibles sont les pins 42, 44, 46, 48, 50, 52
 //sorties au moteur
-#define PIN_PULSE			42		//A19, PWMH1, pin reliée à la pin 2a du multifunction interface
-#define PIN_DIRECTION		??		// pin reliée à la pin 3a du multifunction interface
+#define PIN_PULSE			42		//PA19, pin reliée à la pin 2a du multifunction interface
+#define PIN_DIRECTION		45		//PC18, pin reliée à la pin 3a du multifunction interface
 #define PIN_BRIDGE_ENABLE	??		// pin reliée à la pin 4a du multifunction interface
 
 //Les pins qui nous sont disponibles sont les pins 41, 43, 45, 47, 49, 51
@@ -64,7 +64,8 @@ enum DIR {
 ** Prototypes
 ** ======================================================================== */
 //cette fonction sert à configurer les pin du moteur
-void setupMoteur(void); 
+void setupMoteur(void);
+void tourneMoteur(int angle, int direction); 
 
 /* ========================================================================
 ** End of  Moteur.h
