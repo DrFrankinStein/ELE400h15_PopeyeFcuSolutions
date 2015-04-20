@@ -11,7 +11,7 @@
 ** ========================================================================
 ** Writen by: Francis Bergin
 ** ========================================================================
-** Description: List of fonctions to control the keypad
+** Description: List of fonctions to control the keypad model FMBN16BD
 ** ======================================================================== */
 
 
@@ -41,7 +41,8 @@ Keypad keypad;
 ** ------------------------------------------------------------------------
 ** Description: Setup the keypad
 ** ------------------------------------------------------------------------ */
-void kpSetup(void){
+void kpSetup(void)
+{
     const byte ROWS = 4; //four rows
     const byte COLS = 4; //three columns
     char keys[ROWS][COLS] = {
@@ -64,11 +65,7 @@ void kpSetup(void){
 ** ------------------------------------------------------------------------
 ** Description: return the key pressed
 ** ------------------------------------------------------------------------ */
-char kpGetValue(void){
-    char key = keypad.getKey();
-
-    if (key != NO_KEY)
-        return key;
-    else
-        return -1;
+char kpGetValue(void)
+{
+    return keypad.getKey();
 }
