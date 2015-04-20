@@ -9,7 +9,7 @@ void setup()
   // put your setup code here, to run once:
   Serial.begin(9600);
   setupADC(12);
-  setupLED();
+  /*setupLED();
   resetLED(PIN_POWER);
   resetLED(PIN_CONNEXION);
   resetLED(PIN_ERROR);
@@ -22,12 +22,12 @@ void setup()
   delay(1000);
   resetLED(PIN_POWER);
   resetLED(PIN_CONNEXION);
-  resetLED(PIN_ERROR);
+  resetLED(PIN_ERROR);*/
   value=0;
   
   //Bouton d'urgence
-  pinMode(53, INPUT);
-  attachInterrupt(53, ISR_Emergency, RISING);
+ /* pinMode(53, INPUT);
+  attachInterrupt(53, ISR_Emergency, RISING);*/
   
 }
 
@@ -49,14 +49,14 @@ void loop()
     delay(100);
     
     // Traitement de l'interruption URGENCE
-    if(interuptFlag==1)
+    /*if(interuptFlag==1)
     {
       unsigned char lu=0;
       Serial.print("URGENCE");
       if (Serial.available() > 0) {
         interuptFlag = 0;
       }
-    }
+    }*/
       
 }
 
