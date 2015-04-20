@@ -18,11 +18,7 @@ void kpSetup(void){
     keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 }
 
-char kpGetValue(void){
-    char key = keypad.getKey();
-
-    if (key != NO_KEY)
-        return key;
-    else
-        return -1;
+char kpGetValue(void)
+{
+	return keypad.getKey();
 }
