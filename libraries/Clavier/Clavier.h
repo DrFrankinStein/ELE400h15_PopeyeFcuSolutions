@@ -16,34 +16,47 @@
 #define CLAVIER_H
 
 /* ========================================================================
-** Define
-** ======================================================================== */
-
-#define kpPin1 = 26;
-#define kpPin2 = 27;
-#define kpPin3 = 28;
-#define kpPin4 = 29;
-#define kpPin5 = 33;
-#define kpPin6 = 32;
-#define kpPin7 = 31;
-#define kpPin8 = 30;
-
-
-/* ========================================================================
 ** Includes
 ** ======================================================================== */
 
 #include "Arduino.h"
+#include "Keypad.h"
+
+
+/* ========================================================================
+** Defineconst
+** ======================================================================== */
+
+const int kpPin1 = 26;
+const int kpPin2 = 27;
+const int kpPin3 = 28;
+const int kpPin4 = 29;
+const int kpPin5 = 30;
+const int kpPin6 = 31;
+const int kpPin7 = 32;
+const int kpPin8 = 33;
+
+const byte ROWS = 4; //four rows
+const byte COLS = 4; //four columns
+char keys[ROWS][COLS] = {
+    {'1','2','3','m'},
+    {'4','5','6','o'},
+    {'7','8','9','s'},
+    {'g','0','d','e'}
+};
+byte rowPins[ROWS] = {kpPin1, kpPin2, kpPin3, kpPin4}; //connect to the row pinouts of the keypad
+byte colPins[COLS] = {kpPin5, kpPin6, kpPin7, kpPin8}; //connect to the column pinouts of the keypad
 
 
 /* ========================================================================
 ** Prototypes
 ** ======================================================================== */
 
-void kpSetup(void);
 char kpGetValue(void);
 
 
 /* ========================================================================
 ** End of  Clavier.h
 ** ======================================================================== */
+
+#endif
