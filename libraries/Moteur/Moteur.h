@@ -15,8 +15,8 @@
 ** ======================================================================== */
 
 //Pour éviter de déclarer ce fichier plus d'une fois
-#ifndef LED_H
-#define LED_H
+#ifndef MOTEUR_H
+#define MOTEUR_H
 
 /* ========================================================================
 ** Include files 
@@ -29,16 +29,23 @@
 ** Define
 ** ======================================================================== */
 
-//Les pins qui nous sont disponibles sont les pins 41, 43, 45, 47, 49, 51
 
+//Les pins qui nous sont disponibles sont les pins 42, 44, 46, 48, 50, 52
 //sorties au moteur
-#define PIN_PULSEMOTION		??		// pin reliée à la pin 2a du multifunction interface
+#define PIN_PULSE			42		//A19, PWMH1, pin reliée à la pin 2a du multifunction interface
 #define PIN_DIRECTION		??		// pin reliée à la pin 3a du multifunction interface
 #define PIN_BRIDGE_ENABLE	??		// pin reliée à la pin 4a du multifunction interface
 
-//entrées au Arduino (retour du moteur)
-#define PIN_ATTENTION_PLUS	??		//pin reliée à la pin 5a du multifunction interface
-#define PIN_ATTENTION_MOINS	??		//pin reliée à la pin 6a du multifunction interface
+//Les pins qui nous sont disponibles sont les pins 41, 43, 45, 47, 49, 51
+//entrées au Arduino (retour de l'encodeur à quadrature)
+#define PIN_A_PLUS			41		//pin reliée à la pin 1b du multifunction interface
+#define PIN_A_MOINS			43		//pin reliée à la pin 2b du multifunction interface
+
+#define PIN_B_PLUS			45		//pin reliée à la pin 3b du multifunction interface
+#define PIN_B_MOINS			47		//pin reliée à la pin 4b du multifunction interface
+
+#define PIN_INDEX_PLUS		49		//pin reliée à la pin 5b du multifunction interface
+#define PIN_INDEX_MOINS		51		//pin reliée à la pin 6b du multifunction interface
 
 /* ========================================================================
 ** Structure
@@ -48,7 +55,10 @@
 /* ========================================================================
 ** Enummerations
 ** ======================================================================== */
-
+enum DIR {
+	CCW,		//0, counter clockwise
+	CW			//1, clockwise
+};
 
 /* ========================================================================
 ** Prototypes
