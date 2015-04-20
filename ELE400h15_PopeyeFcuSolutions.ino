@@ -25,6 +25,7 @@
 #include "Led.h"
 #include "Keypad.h"
 #include "Clavier.h"
+#include "Moteur.h"
 
 
 
@@ -587,7 +588,10 @@ void setup()
     
     // lcd init
     lcdInit();
-  
+    
+    //init Moteur
+    setupMoteur();
+    
     //Bouton d'urgence
     pinMode(PIN_KILL_SWITCH, INPUT);
   
