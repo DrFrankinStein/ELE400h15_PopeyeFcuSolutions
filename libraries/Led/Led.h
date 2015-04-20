@@ -4,7 +4,7 @@
 ** Ecole de Technologie Supérieure
 ** ========================================================================
 
-			TEAM:	PopoyeFcuSolution	
+			TEAM:	PopeyeFcuSolutions	
 				
 ** ========================================================================
 ** RÉALISATION: Controleur de FCU	
@@ -29,15 +29,17 @@
 ** Define
 ** ======================================================================== */
 //TO CHANGE NAME
-#define PIN_POWER 35    // pin PB26 relié à la led power
-#define PIN_CONNEXION 37  // pin PA14 relié a la led connexion
-#define PIN_ERROR 39    // pin PA15 relié à la led error
-#define DEL_VERTE PIN_POWER
-#define DEL_JAUNE PIN_CONNEXION
-#define DEL_ROUGE PIN_ERROR
+#define DEL_VERTE 35    // pin PB26 relié à la led power
+#define DEL_JAUNE 37  // pin PA14 relié a la led connexion
+#define DEL_ROUGE 39    // pin PA15 relié à la led error
+#define PIN_POWER DEL_JAUNE
+#define PIN_CONTROL DEL_VERTE
+#define PIN_ERROR DEL_ROUGE
+//#define PIN_OK PIN_POWER
+//#define PIN_WARNING PIN_CONNEXION
 
 /** À enlever d'ici peut être **/
-#define PIN_KILL_SWICTH 53        // pin reliée à la kill switch
+#define PIN_KILL_SWITCH 53        // pin reliée à la kill switch
 
 /* ========================================================================
 ** Structure

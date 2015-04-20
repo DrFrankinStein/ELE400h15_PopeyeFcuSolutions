@@ -4,7 +4,7 @@
 ** Ecole de Technologie Supérieure
 ** ========================================================================
 
-			TEAM:	PopoyeFcuSolution	
+			TEAM:	PopeyeFcuSolutions	
 				
 ** ========================================================================
 ** RÉALISATION: Controleur de FCU	
@@ -41,9 +41,9 @@
 ** ------------------------------------------------------------------------ */
 void setupLED()
 {
-  pinMode(PIN_POWER, OUTPUT);  // on configure les pins en mode outpout
-  pinMode(PIN_CONNEXION, OUTPUT);  // on configure les pins en mode outpout
-  pinMode(PIN_ERROR, OUTPUT);  // on configure les pins en mode outpout  
+  pinMode(DEL_VERTE, OUTPUT);  // on configure les pins en mode outpout
+  pinMode(DEL_JAUNE, OUTPUT);  // on configure les pins en mode outpout
+  pinMode(DEL_ROUGE, OUTPUT);  // on configure les pins en mode outpout  
 }
 
 /* ------------------------------------------------------------------------
