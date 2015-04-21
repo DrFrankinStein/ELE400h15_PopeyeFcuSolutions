@@ -25,7 +25,7 @@
 #include "Led.h"
 #include "Keypad.h"
 #include "Clavier.h"
-#include "Moteur.h"
+//#include "Moteur.h"
 
 
 
@@ -575,6 +575,7 @@ void controleMoteur(void)
   
 }  
 
+
 void setup()
 {
     // debug port init
@@ -590,7 +591,7 @@ void setup()
     lcdInit();
     
     //init Moteur
-    setupMoteur();
+    //setupMoteur();
     
     //Bouton d'urgence
     pinMode(PIN_KILL_SWITCH, INPUT);
