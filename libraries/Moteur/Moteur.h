@@ -32,9 +32,9 @@
 
 //Les pins qui nous sont disponibles sont les pins 42, 44, 46, 48, 50, 52
 //sorties au moteur
-#define PIN_PULSE			42		//PA19, pin reliée à la pin 2a du multifunction interface
-#define PIN_DIRECTION		45		//PC18, pin reliée à la pin 3a du multifunction interface
-#define PIN_BRIDGE_ENABLE	??		// pin reliée à la pin 4a du multifunction interface
+#define PIN_PULSE			7		//PA19, pin reliée à la pin 2a du multifunction interface
+#define PIN_DIRECTION		6		//PC19, pin reliée à la pin 3a du multifunction interface
+#define PIN_BRIDGE_ENABLE	5		//PC17, pin reliée à la pin 4a du multifunction interface
 
 //Les pins qui nous sont disponibles sont les pins 41, 43, 45, 47, 49, 51
 //entrées au Arduino (retour de l'encodeur à quadrature)
