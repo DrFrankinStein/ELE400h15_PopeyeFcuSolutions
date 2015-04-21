@@ -25,7 +25,7 @@
 #include "Led.h"
 #include "Keypad.h"
 #include "Clavier.h"
-//#include "Moteur.h"
+#include "Moteur.h"
 
 
 
@@ -34,7 +34,7 @@
 ** ======================================================================== */
 
 //Énumération des différences écrans possibles
-enum menu_t {LOGO=0, PRINCIPAL, OPTION, MAX_ANGLE_EDIT, MIN_ANGLE_EDIT, DEBUG, INFO, URGENCE, INVALIDE, VALIDE}; 
+enum menu_t {LOGO=0, PRINCIPAL, OPTION, MAX_ANGLE_EDIT, MIN_ANGLE_EDIT, IDLE_ANGLE_EDIT, DEBUG, MENU_DEBUG, INFO, TEST_MOTEUR, AJUSTE_MOTEUR, URGENCE, INVALIDE, VALIDE}; 
 enum moteur_t {INACTIF, IDLE_M, ACTIF};
 
 //Variable limites des angles 
@@ -108,7 +108,7 @@ void displayScreen(int disp)
       break;
       
     case OPTION : 
-      lcdWriteStringAtPosition(0, 0, "OPTIONS:");
+      lcdWriteStringAtPosition(0, 0, "OPTIONS: 0- IDLE(%)");
       lcdWriteStringAtPosition(1, 0, "1-AJUSTER ANGLE MAX.");
       lcdWriteStringAtPosition(2, 0, "2-AJUSTER ANGLE MIN.");
       lcdWriteStringAtPosition(3, 0, "3-INFO. 4-DEBUG. ");
@@ -134,20 +134,48 @@ void displayScreen(int disp)
       lcdWriteStringAtPosition(2, 0, "ANGLE MIN. = ");
       lcdWriteStringAtPosition(3, 0, "ANGLE MAX. = ");
       break;
-    
+  
+    case MENU_DEBUG:
+      lcdWriteStringAtPosition(0, 0, "DEBUG INFO :");
+      lcdWriteStringAtPosition(1, 0, "1- TEST MOTEUR");
+      lcdWriteStringAtPosition(2, 0, "2- AJUSTEMENT MANUEL");
+      lcdWriteStringAtPosition(3, 0, "3- INDICE PERFO.");
+      break; 
+  
     case DEBUG:
       lcdWriteStringAtPosition(0, 0, "DEBUG INFO :");
       lcdWriteStringAtPosition(1, 0, "Kops   = ");
       lcdWriteStringAtPosition(2, 0, "TEMPS  = ");
       lcdWriteStringAtPosition(3, 0, "Kops/s = ");
       break;
+    
+    case TEST_MOTEUR : 
+      lcdWriteStringAtPosition(0, 0, "TEST MOTEUR :");
+      lcdWriteStringAtPosition(1, 0, "1- 360 CW");
+      lcdWriteStringAtPosition(2, 0, "2- 180 CW-180 CCW");
+      lcdWriteStringAtPosition(3, 0, "3- 90 CW  4- 90 CCW");
+      break;
       
+    case AJUSTE_MOTEUR :  
+      lcdWriteStringAtPosition(0, 0, "1- 5  degres CCW ");
+      lcdWriteStringAtPosition(1, 0, "3- 5  degres CW ");
+      lcdWriteStringAtPosition(2, 0, "4- 45 degres CCW ");
+      lcdWriteStringAtPosition(3, 0, "6- 45 degres CW ");
+      break;
+     
     case INVALIDE :
       lcdWriteStringAtPosition(1, 0, "  ENTREE  INVALIDE  ");
       break;
       
     case VALIDE :
       lcdWriteStringAtPosition(1, 0, "    SAUVEGARDEE!    ");
+      break;
+     
+    case IDLE_ANGLE_EDIT:
+      lcdWriteStringAtPosition(0, 0, "ENTRER LA VALEUR DU");
+      lcdWriteStringAtPosition(1, 0, "RATIO D'IDLE (%) :");
+      lcdWriteStringAtPosition(2, 0, "ANCIEN MIN.= ");
+      lcdWriteStringAtPosition(3, 0, "NOUVEAU    = ");
       break;  
   }  
 }
@@ -162,9 +190,6 @@ void displayScreen(int disp)
 ** ------------------------------------------------------------------------ */
 void prepareDisplay(void)
 {
-  //Affiche le baudrate de l'écran
-  //lcdDisplayBaudrate(); 
-  //delay(1000);
   
   //Affiche le logo de l'équipe
   displayScreen(LOGO);
@@ -186,24 +211,6 @@ void prepareDisplay(void)
   delay(1000);
 }
 
-/*int getIntegerFromSlindingWindows(int integer)
-{  
-  
-  int sum=0;
-  
-  for(int i=0;i<nbreDataWindow-1;i++)
-  {
-    dataInteger[i]=dataInteger[i+1];
-    sum += dataInteger[i];  
-  }
-    
-  dataInteger[nbreDataWindow-1]=integer;
-  sum+=dataInteger[nbreDataWindow-1];
-  
-  return sum/nbreDataWindow;
-  
-}*/
-
 /* ------------------------------------------------------------------------
 ** name: getPourcentFromSlindingWindows
 ** ------------------------------------------------------------------------
@@ -215,7 +222,8 @@ void prepareDisplay(void)
 ** ------------------------------------------------------------------------ */
 float getPourcentFromSlindingWindows(float pourcent)
 {  
-  
+  if(pourcent>=100)
+    pourcent=100;
   float sum=0;
   
   //Tasse les plus vielles données vers le début de la fenêtre
@@ -302,7 +310,7 @@ void writeAngle(char key)
           displayScreen(VALIDE);
           delay(1000);
           maxAngle=angle;
-          idleAngle= ((maxAngle-minAngle)* 0.1)+minAngle; 
+          idleAngle= ((maxAngle-minAngle)* fractionIdle)+minAngle; 
         }  
         break;
      
@@ -320,8 +328,25 @@ void writeAngle(char key)
           displayScreen(VALIDE);
           delay(1000);
           minAngle=angle;
-          idleAngle= ((maxAngle-minAngle)* 0.1)+minAngle;
+          idleAngle= ((maxAngle-minAngle)* fractionIdle)+minAngle;
         } 
+        break;
+        
+        case IDLE_ANGLE_EDIT:
+        if(angle>100 || angle<0)
+        {
+          displayScreen(INVALIDE);
+          delay(1000);
+          isValide=false;
+        }
+        else
+          {
+          Serial.println(angle);
+          displayScreen(VALIDE);
+          delay(1000);
+          fractionIdle=angle/100;
+          idleAngle= ((maxAngle-minAngle)* fractionIdle)+minAngle;
+        }   
         break;
         
       default:
@@ -388,7 +413,7 @@ void keyboardAction(char key)
         
           case 'm':
             if(etatMoteur==ACTIF)
-              etatMoteur==IDLE_M;
+              etatMoteur=IDLE_M;
             currentMenu=OPTION;
             displayScreen(currentMenu);
           break;
@@ -427,12 +452,40 @@ void keyboardAction(char key)
             break;
             
           case '4':
-            currentMenu=DEBUG;
+            currentMenu=MENU_DEBUG;
             displayScreen(currentMenu);
             break;
+            
+          case '0':
+            currentMenu=IDLE_ANGLE_EDIT;
+            for(int i=0;i<maxEditBoxLength;i++)
+              editBox[i]=0;
+            editCount=0;
+            displayScreen(currentMenu);
+            break;  
        }  
        break;
 
+     case IDLE_ANGLE_EDIT:
+       switch(key)
+       { 
+         case 'o':
+           writeAngle(key);  
+         case 's':
+         case 'm':
+           editMode=false;
+           lcdUnderlineCursor(OFF);
+           currentMenu=OPTION;
+           displayScreen(currentMenu);
+           break;
+         default :
+           //touche clavier pour editer
+           editMode=true;
+           lcdUnderlineCursor(ON);
+           writeAngle(key);
+           break;   
+       }
+       break;
      
      case MAX_ANGLE_EDIT:
        switch(key)
@@ -499,11 +552,95 @@ void keyboardAction(char key)
            displayScreen(currentMenu);
            break;   
        }
-       break;  
+       break;
+     
+     case MENU_DEBUG : 
+     switch(key)
+       {   
+         case 'o':
+         case 'm': 
+         case 's':
+            currentMenu=OPTION;
+            displayScreen(currentMenu);
+            break;
+        
+          case '1':
+            currentMenu=TEST_MOTEUR;
+            displayScreen(currentMenu);
+            break;
+            
+          case '2':
+            currentMenu=AJUSTE_MOTEUR;
+            displayScreen(currentMenu);
+            break;
+            
+          case '3':
+            currentMenu=DEBUG;
+            displayScreen(currentMenu);
+            break;
+       }  
+       break;
+     
+     case TEST_MOTEUR : 
+     switch(key)
+     { 
+         case 'o':
+         case 'm': 
+         case 's':
+            currentMenu=MENU_DEBUG;
+            displayScreen(currentMenu);
+            break;
+        
+          case '1':
+            moteurTourne360CW();
+            break;
+            
+          case '2':
+            moteurTourne(180, CW);
+            delay(250);
+            moteurTourne(180, CCW);
+            break;
+            
+          case '3':
+            moteurTourne(90, CW);
+            break;
+            
+          case '4':
+            moteurTourne(90, CCW);
+            break;  
+     }
+     break; 
+     
+     case AJUSTE_MOTEUR : 
+     switch(key)
+     { 
+         case 'o':
+         case 'm': 
+         case 's':
+            currentMenu=MENU_DEBUG;
+            displayScreen(currentMenu);
+            break;
+        
+          case '1':
+            moteurTourne(5, CCW);
+            break;
+            
+          case '3':
+            moteurTourne(5, CW);
+            break;
+            
+          case '4':
+            moteurTourne(45, CCW);
+            break;
+            
+          case '6':
+            moteurTourne(45, CW);
+            break;  
+     }
+     break;  
    } 
 }   
 
-//MENU_PRINCIPAL=0, MENU_OPTION, MENU_MAX_ANGLE_EDIT, MENU_MIN_ANGLE_EDIT, MENU_DEBUG};
 void gestionMenu(void)
 {
    switch(currentMenu)
@@ -545,6 +682,16 @@ void gestionMenu(void)
          lcdWriteStringAtPosition(3,13, editBox);
        }  
        break;
+       
+     case IDLE_ANGLE_EDIT:
+       if(!editMode)
+         lcdWriteFloatAtPosition(2, 13, fractionIdle*100);
+       else
+       {
+         lcdWriteStringAtPosition(3,13,"      ");
+         lcdWriteStringAtPosition(3,13, editBox);
+       }  
+       break;  
      
      case DEBUG:
        lcdWriteFloatAtPosition(1, 9, (float)nbCycle/1000);
@@ -553,6 +700,7 @@ void gestionMenu(void)
        break;
      
      case INFO:
+       lcdWriteFloatAtPosition(1, 13, idleAngle);
        lcdWriteFloatAtPosition(2, 13, minAngle);
        lcdWriteFloatAtPosition(3, 13, maxAngle);
        break;  
@@ -572,7 +720,7 @@ void gestionMenu(void)
 
 void controleMoteur(void)
 {
-  
+    moteurGoToAngle(currentAngle);
 }  
 
 
@@ -591,7 +739,7 @@ void setup()
     lcdInit();
     
     //init Moteur
-    //setupMoteur();
+    moteurSetup();
     
     //Bouton d'urgence
     pinMode(PIN_KILL_SWITCH, INPUT);
@@ -600,6 +748,11 @@ void setup()
     attachInterrupt(PIN_KILL_SWITCH, ISR_Emergency, FALLING); 
    
     prepareDisplay();
+    
+    for(int i = 0 ; i<nbreDataWindow;i++)
+    {
+      updateDataLevier(); 
+    }  
 }
 
 void loop()
@@ -608,6 +761,8 @@ void loop()
     char key;
    
     updateDataLevier();
+    
+    moteurGoToAngle(currentAngle);
  
     if((currentMillis-previousMillis)>interval)
     {
@@ -623,9 +778,9 @@ void loop()
     if(interuptFlag==1)
     {
       
-      
       etatMoteur=INACTIF;
       currentAngle=minAngle;
+      moteurGoToAngle(currentAngle);
       
       displayScreen(URGENCE);
       
@@ -657,11 +812,10 @@ void loop()
     nbCycle++;
 }
 
-
-
 void ISR_Emergency ()
 {
-    //Le initFlag est à 1 seulement au début, car l'interrupt se déclanche toujours lorsqu'on active le ISR dans le setup()
+    //Le initFlag est à 1 seulement au début, car l'interrupt se 
+    //déclanche toujours lorsqu'on active le ISR dans le setup()
     //On le remet à zéro et après le ISR marche comme il le faut.
     if(initFlag)
       initFlag=0;

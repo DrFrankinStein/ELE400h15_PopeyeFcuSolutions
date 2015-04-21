@@ -21,6 +21,16 @@
 
 #include "Moteur.h" 
 
+const int delai = 1;
+const float un_degre = 51200/360;
+const float degre180 = 51200/2;
+const float degre0 = 0;
+
+float currentMoteurAngle = 0;
+
+
+
+
 /* ========================================================================
 ** Prototypes
 ** ======================================================================== */
@@ -39,10 +49,11 @@
 ** ------------------------------------------------------------------------
 ** Description: wat
 ** ------------------------------------------------------------------------ */
-void setupMoteur(void)
+void moteurSetup(void)
 {
   pinMode(PIN_PULSE, OUTPUT);	
-  pinMode(PIN_MOTEUR, OUTPUT);	
+  pinMode(PIN_DIRECTION, OUTPUT);
+  pinMode(PIN_BRIDGE_ENABLE, INPUT);  
 }
 
 /* ------------------------------------------------------------------------
@@ -53,18 +64,44 @@ void setupMoteur(void)
 ** ------------------------------------------------------------------------
 ** Description: wat
 ** ------------------------------------------------------------------------ */ 
-void tourneMoteur(int angle, int direction) 
+void moteurTourne(float angle, int direction) 
 {  
 	digitalWrite(PIN_DIRECTION, direction);
 	
-	g_APinDescription[PIN_PULSE].pPort -> PIO_SODR = g_APinDescription[PIN_PULSE].ulPin;
-	g_APinDescription[PIN_PULSE].pPort -> PIO_SODR = g_APinDescription[PIN_PULSE].ulPin;
+	int mesure = (int)(un_degre*angle);
 	
-	for(int i = 0; i<82;i++)
-		g_APinDescription[PIN_PULSE].pPort -> PIO_CODR = g_APinDescription[PIN_PULSE].ulPin;
+	for(int i = 0; i<(mesure);i++)
+	{
+		digitalWrite(PIN_PULSE, HIGH);
+		delayMicroseconds(delai);
+		digitalWrite(PIN_PULSE, LOW);
+	}	
+}
+
+void moteurTourne360CW(void)
+{
+	moteurTourne(360, CW);
+}
+
+void moteurGoToAngle(float angle)
+{
+	if(angle>=360)
+		angle=360;
 	
-	//digitalWrite(PIN_PULSE, HIGH);
-	//digitalWrite(PIN_PULSE, LOW);
+	float tmpAngle = angle - currentMoteurAngle;
+	int direction;
+	
+	if(tmpAngle>0)
+		direction = CW;
+	else
+	{
+		direction = CCW;
+		tmpAngle=-tmpAngle;
+	}	
+	
+	moteurTourne(tmpAngle, direction);
+	currentMoteurAngle = angle;
+			
 }
 
 /* ========================================================================

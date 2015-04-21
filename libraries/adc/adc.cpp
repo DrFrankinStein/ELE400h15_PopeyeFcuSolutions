@@ -125,7 +125,8 @@ int readLevierInteger(void)
 
 float readLevierPourcent(void)
 {
-	return readADCInteger(ADC_PIN) * 100 / (pow(2,bitsResolution)-6);
+	//return readADCInteger(ADC_PIN) * 100 / (pow(2,bitsResolution)-6);
+	return readADCInteger(ADC_PIN) * 100 / ((pow(2,bitsResolution))*0.7);
 }
 
 /* ------------------------------------------------------------------------

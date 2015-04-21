@@ -64,8 +64,10 @@ enum DIR {
 ** Prototypes
 ** ======================================================================== */
 //cette fonction sert à configurer les pin du moteur
-void setupMoteur(void);
-void tourneMoteur(int angle, int direction); 
+void moteurSetup(void);
+void moteurTourne(float angle, int direction);
+void moteurTourne360CW(void);
+void moteurGoToAngle(float angle);
 
 /* ========================================================================
 ** End of  Moteur.h
